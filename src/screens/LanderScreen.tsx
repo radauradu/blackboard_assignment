@@ -1,28 +1,12 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import LottieView from "lottie-react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const DESIGN_WIDTH = 393;
 const DESIGN_HEIGHT = 852;
-const BAG_SIZE = 200;
 
 type LanderScreenProps = {
   onCreateMealPlan?: () => void;
 };
-
-type FloatingFood = {
-  emoji: string;
-  left: number;
-  top: number;
-};
-
-const floatingFoods: FloatingFood[] = [
-  { emoji: "🍎", left: 72, top: 272 },
-  { emoji: "🥩", left: 238, top: 255 },
-  { emoji: "🧀", left: 29, top: 392 },
-  { emoji: "🥕", left: 316, top: 359 },
-  { emoji: "🌽", left: 77, top: 530 },
-  { emoji: "🍆", left: 198, top: 567 },
-  { emoji: "🫒", left: 308, top: 510 },
-];
 
 export function LanderScreen({ onCreateMealPlan }: LanderScreenProps) {
   return (
@@ -32,22 +16,16 @@ export function LanderScreen({ onCreateMealPlan }: LanderScreenProps) {
       </Text>
 
       <View pointerEvents="none" style={styles.illustration}>
-        {floatingFoods.map(({ emoji, left, top }) => (
-          <Text
-            allowFontScaling={false}
-            key={emoji}
-            style={[styles.food, { left, top }]}
-          >
-            {emoji}
-          </Text>
-        ))}
-
-        <Image
-          accessibilityLabel="Esselunga shopping bag"
+        <LottieView
+          autoPlay
+          loop
           resizeMode="contain"
-          source={require("../../assets/images/lander-bag.png")}
-          style={styles.bag}
+          source={require("../animations/lander page/cooking.json")}
+          style={styles.animation}
         />
+        <Text style={styles.introduction}>
+          Fresh meal ideas, planned around you.
+        </Text>
       </View>
 
       <Pressable
@@ -82,23 +60,24 @@ const styles = StyleSheet.create({
     width: 345,
   },
   illustration: {
-    height: DESIGN_HEIGHT,
+    alignItems: "center",
     left: 0,
     position: "absolute",
-    top: 0,
+    top: 164,
     width: DESIGN_WIDTH,
   },
-  bag: {
-    height: BAG_SIZE,
-    left: (DESIGN_WIDTH - BAG_SIZE) / 2,
-    position: "absolute",
-    top: DESIGN_HEIGHT / 2 - 114,
-    width: BAG_SIZE,
+  animation: {
+    height: 300,
+    width: 300,
   },
-  food: {
-    fontSize: 40,
-    lineHeight: 48,
-    position: "absolute",
+  introduction: {
+    color: "rgba(60, 60, 67, 0.72)",
+    fontFamily: "PromoRegular",
+    fontSize: 17,
+    lineHeight: 22,
+    marginTop: 4,
+    textAlign: "center",
+    width: 300,
   },
   button: {
     alignItems: "center",

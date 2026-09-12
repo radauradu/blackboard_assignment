@@ -32,10 +32,14 @@ export const useFlowStore = create<FlowStore>((set) => ({
     }),
   chooseNoDietaryNeeds: () =>
     set({ dietaryChoiceMade: true, dietaryNeeds: [] }),
+  clearDietaryNeeds: () =>
+    set({ dietaryChoiceMade: false, dietaryNeeds: [] }),
   setNutritionalGoal: (nutritionalGoal) =>
     set({ nutritionalGoal, nutritionalGoalChoiceMade: true }),
   chooseNoNutritionalGoal: () =>
     set({ nutritionalGoal: null, nutritionalGoalChoiceMade: true }),
+  clearNutritionalGoal: () =>
+    set({ nutritionalGoal: null, nutritionalGoalChoiceMade: false }),
   setGenerationStatus: (generationStatus, generationError = null) =>
     set({
       generationStatus,

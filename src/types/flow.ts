@@ -40,8 +40,10 @@ export type FlowActions = {
   setBudget: (budget: number) => void;
   toggleDietaryNeed: (need: DietaryNeed) => void;
   chooseNoDietaryNeeds: () => void;
+  clearDietaryNeeds: () => void;
   setNutritionalGoal: (goal: NutritionalGoal) => void;
   chooseNoNutritionalGoal: () => void;
+  clearNutritionalGoal: () => void;
   setGenerationStatus: (
     status: GenerationStatus,
     error?: string | null,

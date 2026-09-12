@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import LottieView from "lottie-react-native";
 import {
   Image,
   PanResponder,
@@ -40,6 +41,17 @@ type BudgetScreenProps = {
 };
 
 function GradientBudgetAmount({ budget }: { budget: number }) {
+  const amount = String(budget);
+  const amountWidth = amount.length * 54;
+  const amountLeft = DESIGN_WIDTH / 2 - amountWidth / 2;
+  const amountRight = DESIGN_WIDTH / 2 + amountWidth / 2;
+  const heatFraction = clamp(
+    (budget - MIN_BUDGET) / (MAX_BUDGET - MIN_BUDGET),
+    0,
+    1,
+  );
+  const coolEnd = (1 - heatFraction) * 100;
+  const redStart = Math.min(100, coolEnd + 13);
   return (
     <Svg height={AMOUNT_HEIGHT} width={DESIGN_WIDTH}>
       <Defs>
@@ -47,17 +59,26 @@ function GradientBudgetAmount({ budget }: { budget: number }) {
           gradientUnits="userSpaceOnUse"
           id="budgetAmountGradient"
           x1={0}
-          x2={DESIGN_WIDTH}
+          x2={0}
           y1={0}
-          y2={0}
+          y2={AMOUNT_HEIGHT}
         >
           <Stop offset="0%" stopColor="#1A1A1A" />
-          <Stop offset="29%" stopColor="#1A1A1A" />
-          <Stop offset="42%" stopColor="#34C759" />
-          <Stop offset="56%" stopColor="#1A1A1A" />
-          <Stop offset="100%" stopColor="#1A1A1A" />
+          <Stop offset={`${coolEnd}%`} stopColor="#1A1A1A" />
+          <Stop offset={`${redStart}%`} stopColor="#FF6258" />
+          <Stop offset="100%" stopColor="#FF3B30" />
         </LinearGradient>
       </Defs>
+      <SvgText
+        fill="url(#budgetAmountGradient)"
+        fontFamily="PromoSemiBold"
+        fontSize={52}
+        textAnchor="end"
+        x={amountLeft - 10}
+        y={91}
+      >
+        €
+      </SvgText>
       <SvgText
         fill="url(#budgetAmountGradient)"
         fontFamily="PromoSemiBold"
@@ -66,7 +87,17 @@ function GradientBudgetAmount({ budget }: { budget: number }) {
         x={DESIGN_WIDTH / 2}
         y={96}
       >
-        {`€${budget}`}
+        {amount}
+      </SvgText>
+      <SvgText
+        fill="rgba(60, 60, 67, 0.6)"
+        fontFamily="PromoMedium"
+        fontSize={17}
+        textAnchor="start"
+        x={amountRight + 12}
+        y={89}
+      >
+        / week
       </SvgText>
     </Svg>
   );
@@ -96,9 +127,7 @@ export function BudgetScreen({ onBack, onContinue }: BudgetScreenProps) {
         0,
         1,
       );
-      const rawBudget = MIN_BUDGET + fraction * (MAX_BUDGET - MIN_BUDGET);
-
-      setBudget(snapBudget(rawBudget));
+      setBudget(snapBudget(MIN_BUDGET + fraction * (MAX_BUDGET - MIN_BUDGET)));
     },
     [setBudget],
   );
@@ -119,7 +148,7 @@ export function BudgetScreen({ onBack, onContinue }: BudgetScreenProps) {
 
   const budgetFraction = (budget - MIN_BUDGET) / (MAX_BUDGET - MIN_BUDGET);
   const thumbLeft =
-    THUMB_SIZE / 2 + budgetFraction * (sliderWidth - THUMB_SIZE) - THUMB_SIZE / 2;
+    budgetFraction * (sliderWidth - THUMB_SIZE);
 
   return (
     <View style={styles.screen}>
@@ -149,7 +178,13 @@ export function BudgetScreen({ onBack, onContinue }: BudgetScreenProps) {
 
       <View pointerEvents="none" style={styles.amountContainer}>
         <GradientBudgetAmount budget={budget} />
-        <Text style={styles.frequency}>per week</Text>
+        <LottieView
+          autoPlay
+          loop
+          resizeMode="contain"
+          source={require("../animations/budget selection page/Fire Flame.json")}
+          style={styles.fireAnimation}
+        />
       </View>
 
       <View
@@ -179,7 +214,12 @@ export function BudgetScreen({ onBack, onContinue }: BudgetScreenProps) {
         {...sliderResponder.panHandlers}
       >
         <View style={styles.sliderTrack} />
-        <View style={[styles.sliderThumb, { left: thumbLeft }]} />
+        <View
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          pointerEvents="none"
+          style={[styles.sliderThumb, { left: thumbLeft }]}
+        />
       </View>
 
       <Pressable
@@ -259,18 +299,16 @@ const styles = StyleSheet.create({
     top: 287,
     width: DESIGN_WIDTH,
   },
-  frequency: {
-    color: "rgba(60, 60, 67, 0.6)",
-    fontFamily: "PromoMedium",
-    fontSize: 20,
-    lineHeight: 24,
-    marginTop: -1,
+  fireAnimation: {
+    height: 104,
+    marginTop: -8,
+    width: 104,
   },
   slider: {
     height: 64,
     left: 24,
     position: "absolute",
-    top: 488,
+    top: 506,
     width: 345,
   },
   sliderTrack: {
