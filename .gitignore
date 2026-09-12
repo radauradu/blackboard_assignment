@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native build output and credentials
+/android/
+/ios/
+.kotlin/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Local environment files: keep only the safe template
+.env
+.env.*
+!.env.example
+
+# Tooling and operating system output
+*.tsbuildinfo
+.DS_Store
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.metro-health-check*
