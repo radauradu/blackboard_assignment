@@ -15,6 +15,7 @@
 - For the week plan screen: 
     1. the filters button was added in order to remind the user what filters were used to generate that specific meal plan.
     2. the swipe option for navigation between day plans was added for a smoother experience.
+- Added kitchen tips while the meal plan is loading in order to keep the user busy while waiting.    
 
 ## LLM workflow
 
